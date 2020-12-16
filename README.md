@@ -56,7 +56,7 @@ Install dependecies.
 ```
 pip install -r requirements.txt
 ```
-Install the renderer (used to visualize predictions).
+Install the renderer, which is used to visualize predictions. The renderer implementation is forked from [here](https://github.com/cleardusk/3DDFA_V2/tree/master/Sim3DR).
 ```
 cd Sim3DR
 sh build_sim3dr.sh
