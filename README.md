@@ -11,7 +11,6 @@
 
 <!--ts-->
 - [Paper details](#paper-details)
-  * [arXiv preprint](#arxiv-preprint)
   * [Abstract](#abstract)
   * [Authors](#authors)
   * [Citation](#citation)
