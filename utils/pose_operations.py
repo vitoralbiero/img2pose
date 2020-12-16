@@ -234,7 +234,15 @@ def get_pose(vertices, twod_landmarks, camera_intrinsics, initial_pose=None):
 
 
 def transform_pose_global_project_bbox(
-    boxes, dofs, pose_mean, pose_stddev, image_shape, threed_68_points=None
+    boxes,
+    dofs,
+    pose_mean,
+    pose_stddev,
+    image_shape,
+    threed_68_points=None,
+    bbox_x_factor=1.1,
+    bbox_y_factor=1.1,
+    expand_forehead=0.3,
 ):
     if len(dofs) == 0:
         return boxes, dofs
@@ -274,10 +282,11 @@ def transform_pose_global_project_bbox(
             projected_bbox = expand_bbox_rectangle(
                 w,
                 h,
-                1.1,
-                1.1,
-                projected_lms,
+                bbox_x_factor=bbox_x_factor,
+                bbox_y_factor=bbox_y_factor,
+                lms=projected_lms,
                 roll=global_dof[2],
+                expand_forehead=expand_forehead,
             )
         else:
             projected_bbox = boxes[i]

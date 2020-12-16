@@ -105,6 +105,9 @@ class FasterDoFRCNN(GeneralizedRCNN):
         pose_stddev=None,
         threed_68_points=None,
         threed_5_points=None,
+        bbox_x_factor=1.1,
+        bbox_y_factor=1.1,
+        expand_forehead=0.3,
     ):
         if not hasattr(backbone, "out_channels"):
             raise ValueError(
@@ -193,6 +196,9 @@ class FasterDoFRCNN(GeneralizedRCNN):
             pose_stddev=pose_stddev,
             threed_68_points=threed_68_points,
             threed_5_points=threed_5_points,
+            bbox_x_factor=bbox_x_factor,
+            bbox_y_factor=bbox_y_factor,
+            expand_forehead=expand_forehead,
         )
 
         if image_mean is None:
@@ -240,6 +246,9 @@ class DOFRoIHeads(RoIHeads):
         pose_stddev=None,
         threed_68_points=None,
         threed_5_points=None,
+        bbox_x_factor=1.1,
+        bbox_y_factor=1.1,
+        expand_forehead=0.3,
     ):
         super(RoIHeads, self).__init__()
 
@@ -286,6 +295,10 @@ class DOFRoIHeads(RoIHeads):
         self.pose_stddev = pose_stddev
         self.threed_68_points = threed_68_points
         self.threed_5_points = threed_5_points
+
+        self.bbox_x_factor = bbox_x_factor
+        self.bbox_y_factor = bbox_y_factor
+        self.expand_forehead = expand_forehead
 
     def select_training_samples(
         self,
@@ -420,6 +433,9 @@ class DOFRoIHeads(RoIHeads):
                 self.pose_stddev,
                 image_shape,
                 self.threed_68_points,
+                bbox_x_factor=self.bbox_x_factor,
+                bbox_y_factor=self.bbox_y_factor,
+                expand_forehead=self.expand_forehead,
             )
 
             # non-maximum suppression, independently done per class

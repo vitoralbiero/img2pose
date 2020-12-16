@@ -32,6 +32,9 @@ class FacePoseBBoxFreeModel:
         threed_5_points=None,
         rpn_pre_nms_top_n_test=6000,
         rpn_post_nms_top_n_test=1000,
+        bbox_x_factor=1.1,
+        bbox_y_factor=1.1,
+        expand_forehead=0.3,
     ):
         self.depth = depth
         self.min_size = min_size
@@ -70,6 +73,9 @@ class FacePoseBBoxFreeModel:
             threed_5_points=threed_5_points,
             rpn_pre_nms_top_n_test=rpn_pre_nms_top_n_test,
             rpn_post_nms_top_n_test=rpn_post_nms_top_n_test,
+            bbox_x_factor=bbox_x_factor,
+            bbox_y_factor=bbox_y_factor,
+            expand_forehead=expand_forehead,
         )
 
         # if using cpu, remove the parallel modules from the saved model
