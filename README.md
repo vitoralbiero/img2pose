@@ -21,6 +21,7 @@
   * [Train](#train)
 - [Testing](#testing)
   * [WIDER FACE dataset evaluation](#wider-face-dataset-evaluation)
+  * [Visualizing trained model](#visualizing-trained-model)
   * [AFLW2000-3D dataset evaluation](#aflw2000-3d-dataset-evaluation)
   * [BIWI dataset evaluation](#biwi-dataset-evaluation)
   * [Testing on your own images](#testing-on-your-own-images)
@@ -122,19 +123,22 @@ python3 evaluation/evaluate_wider.py
 
 To check mAP and plot curves, download the [eval tools](http://shuoyang1213.me/WIDERFACE/) and point to results/WIDER_FACE/Val.
 
+### Visualizing trained model
+To visualize a trained model on the WIDER FACE validation set run the notebook [visualize_trained_model_predictions](evaluation/jupyter_notebooks/visualize_trained_model_predictions.ipynb).
+
 ### AFLW2000-3D dataset evaluation
 Download the [AFLW2000-3D](http://www.cbsr.ia.ac.cn/users/xiangyuzhu/projects/3DDFA/Database/AFLW2000-3D.zip) dataset and unzip to datasets/AFLW2000.
 
-Run the notebook [aflw_2000_3d_evaluation](https://github.com/vitoralbiero/img2pose/evaluation/jupyter_notebooks/aflw_2000_3d_evaluation.ipynb).
+Run the notebook [aflw_2000_3d_evaluation](./evaluation/jupyter_notebooks/aflw_2000_3d_evaluation.ipynb).
 
 ### BIWI dataset evaluation
 Download the [BIWI](http://data.vision.ee.ethz.ch/cvl/gfanelli/kinect_head_pose_db.tgz) dataset and unzip to datasets/BIWI.
 
-Run the notebook [biwi_evaluation](https://github.com/vitoralbiero/img2pose/evaluation/jupyter_notebooks/biwi_evaluation.ipynb).
+Run the notebook [biwi_evaluation](./evaluation/jupyter_notebooks/biwi_evaluation.ipynb).
 
 ### Testing on your own images
 
-Run the notebook [test_own_images](https://github.com/vitoralbiero/img2pose/evaluation/jupyter_notebooks/test_own_images.ipynb).
+Run the notebook [test_own_images](./evaluation/jupyter_notebooks/test_own_images.ipynb).
 
 ## Resources
 [Model Zoo](https://github.com/vitoralbiero/img2pose/wiki/Model-Zoo)
