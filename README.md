@@ -20,8 +20,8 @@
   * [Prepare WIDER FACE dataset](#prepare-wider-face-dataset)
   * [Train](#train)
 - [Testing](#testing)
-  * [WIDER FACE dataset evaluation](#wider-face-dataset-evaluation)
   * [Visualizing trained model](#visualizing-trained-model)
+  * [WIDER FACE dataset evaluation](#wider-face-dataset-evaluation)  
   * [AFLW2000-3D dataset evaluation](#aflw2000-3d-dataset-evaluation)
   * [BIWI dataset evaluation](#biwi-dataset-evaluation)
   * [Testing on your own images](#testing-on-your-own-images)
@@ -110,6 +110,9 @@ To evaluate with the pretrained model, download the model from [Model Zoo](https
 
 If evaluating with own trained model, change the pose mean and standard deviation to the ones trained with.
 
+### Visualizing trained model
+To visualize a trained model on the WIDER FACE validation set run the notebook [visualize_trained_model_predictions](evaluation/jupyter_notebooks/visualize_trained_model_predictions.ipynb).
+
 ### WIDER FACE dataset evaluation
 If you haven't done already, download the [WIDER FACE](http://shuoyang1213.me/WIDERFACE/) dataset and extract to datasets/WIDER_Face.
 
@@ -122,9 +125,6 @@ python3 evaluation/evaluate_wider.py
 ```
 
 To check mAP and plot curves, download the [eval tools](http://shuoyang1213.me/WIDERFACE/) and point to results/WIDER_FACE/Val.
-
-### Visualizing trained model
-To visualize a trained model on the WIDER FACE validation set run the notebook [visualize_trained_model_predictions](evaluation/jupyter_notebooks/visualize_trained_model_predictions.ipynb).
 
 ### AFLW2000-3D dataset evaluation
 Download the [AFLW2000-3D](http://www.cbsr.ia.ac.cn/users/xiangyuzhu/projects/3DDFA/Database/AFLW2000-3D.zip) dataset and unzip to datasets/AFLW2000.
