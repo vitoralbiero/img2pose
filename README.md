@@ -27,7 +27,6 @@
   * [Testing on your own images](#testing-on-your-own-images)
 - [Output customization](#output-customization)
 - [Resources](#resources)
-- [Citation](#citation)
 - [License](#license)
 <!--te-->
 
