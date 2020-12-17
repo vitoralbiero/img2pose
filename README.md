@@ -14,7 +14,6 @@
 <!--ts-->
 - [Paper details](#paper-details)
   * [Abstract](#abstract)
-  * [Authors](#authors)
   * [Citation](#citation)
 - [Installation](#installation)
 - [Training](#training)
@@ -26,6 +25,7 @@
   * [AFLW2000-3D dataset evaluation](#aflw2000-3d-dataset-evaluation)
   * [BIWI dataset evaluation](#biwi-dataset-evaluation)
   * [Testing on your own images](#testing-on-your-own-images)
+- [Output customization](#output-customization)
 - [Resources](#resources)
 - [Citation](#citation)
 - [License](#license)
@@ -33,7 +33,7 @@
 
 ## Paper details
 
-Vitor Albiero, Xingyu Chen, Xi Yin, Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" [arXiv:2012.07791](https://arxiv.org/abs/2012.07791), Dec., 2020
+[Vítor Albiero](https://vitoralbiero.netlify.app), Xingyu Chen, Xi Yin, Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" [arXiv:2012.07791](https://arxiv.org/abs/2012.07791), Dec., 2020
 
 
 ### Abstract
@@ -139,6 +139,32 @@ Run the notebook [biwi_evaluation](./evaluation/jupyter_notebooks/biwi_evaluatio
 ### Testing on your own images
 
 Run the notebook [test_own_images](./evaluation/jupyter_notebooks/test_own_images.ipynb).
+
+## Output customization
+
+For every face detected, the model outputs by default:
+- Pose (6 degrees of freedom)
+- Projected bounding boxes
+- Face scores
+
+Since the projected bounding box without expansion ends at the start of the forehead, we provide a way of expanding the forehead invidually, along with default x and y expansion. 
+
+To customize the size of the projected bounding boxes, when creating the model change any of the bounding box expansion variables as shown below (a complete example can be seen at [visualize_trained_model_predictions](evaluation/jupyter_notebooks/visualize_trained_model_predictions.ipynb)).
+```
+# how much to expand in width
+bbox_x_factor = 1.1
+# how much to expand in height
+bbox_y_factor = 1.1
+# how much to expand in the forehead
+expand_forehead = 0.3
+
+img2pose_model = img2poseModel(
+    ...,    
+    bbox_x_factor=bbox_x_factor,
+    bbox_y_factor=bbox_y_factor,
+    expand_forehead=expand_forehead,
+)
+```
 
 ## Resources
 [Model Zoo](https://github.com/vitoralbiero/img2pose/wiki/Model-Zoo)
