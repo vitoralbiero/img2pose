@@ -40,7 +40,7 @@
 
 
 ### Citation
-If you use any part of our code, please cite our paper.
+If you use any part of our code or data, please cite our paper.
 ```
 @InProceedings{img2pose,
     author = {Vítor Albiero, Xingyu Chen, Xi Yin, Guan Pang, Tal Hassner},
