@@ -12,7 +12,7 @@ from config import Config
 from data_loader_lmdb import LMDBDataLoader
 from data_loader_lmdb_augmenter import LMDBDataLoaderAugmenter
 from early_stop import EarlyStop
-from fpn_faster_rcnn_model import FacePoseBBoxFreeModel
+from img2pose import img2poseModel
 from model_loader import load_model, save_model
 from train_logger import TrainLogger
 from utils.dist import init_distributed_mode, reduce_dict
@@ -39,7 +39,7 @@ class Train:
             self.val_loader = LMDBDataLoader(self.config, self.config.val_source, False)
 
         # creates model
-        self.fp_bb_free_model = FacePoseBBoxFreeModel(
+        self.img2pose_model = img2poseModel(
             depth=self.config.depth,
             min_size=self.config.min_size,
             max_size=self.config.max_size,
@@ -54,13 +54,13 @@ class Train:
         # optimizer for the backbone and heads
         if args.optimizer == "Adam":
             self.optimizer = optim.Adam(
-                self.fp_bb_free_model.fpn_model.parameters(),
+                self.img2pose_model.fpn_model.parameters(),
                 lr=self.config.lr,
                 weight_decay=self.config.weight_decay,
             )
         elif args.optimizer == "SGD":
             self.optimizer = optim.SGD(
-                self.fp_bb_free_model.fpn_model.parameters(),
+                self.img2pose_model.fpn_model.parameters(),
                 lr=self.config.lr,
                 weight_decay=self.config.weight_decay,
                 momentum=self.config.momentum,
@@ -72,7 +72,7 @@ class Train:
         if self.config.resume_path:
             print(f"Resuming training from {self.config.resume_path}")
             load_model(
-                self.fp_bb_free_model.fpn_model,
+                self.img2pose_model.fpn_model,
                 self.config.resume_path,
                 model_only=False,
                 optimizer=self.optimizer,
@@ -83,7 +83,7 @@ class Train:
         if self.config.pretrained_path:
             print(f"Loading pretrained weights from {self.config.pretrained_path}")
             load_model(
-                self.fp_bb_free_model.fpn_model,
+                self.img2pose_model.fpn_model,
                 self.config.pretrained_path,
                 model_only=True,
                 cpu_mode=str(self.config.device) == "cpu",
@@ -119,7 +119,7 @@ class Train:
             self.early_stop = EarlyStop(mode="min", patience=5)
 
     def run(self):
-        self.fp_bb_free_model.train()
+        self.img2pose_model.train()
 
         # accumulate running loss to log into tensorboard
         running_losses = {}
@@ -147,7 +147,7 @@ class Train:
                 self.optimizer.zero_grad()
 
                 # forward pass
-                losses = self.fp_bb_free_model.forward(imgs, targets)
+                losses = self.img2pose_model.forward(imgs, targets)
 
                 loss = sum(loss for loss in losses.values())
 
@@ -155,7 +155,7 @@ class Train:
                 loss.backward()
 
                 torch.nn.utils.clip_grad_norm_(
-                    self.fp_bb_free_model.fpn_model.parameters(), 10
+                    self.img2pose_model.fpn_model.parameters(), 10
                 )
 
                 self.optimizer.step()
@@ -195,7 +195,7 @@ class Train:
             else:
                 # otherwise just save the model
                 save_model(
-                    self.fp_bb_free_model.fpn_model_without_ddp,
+                    self.img2pose_model.fpn_model_without_ddp,
                     self.optimizer,
                     self.config,
                     step=step,
@@ -221,7 +221,7 @@ class Train:
             self.best_step = step
 
             save_model(
-                self.fp_bb_free_model.fpn_model_without_ddp,
+                self.img2pose_model.fpn_model_without_ddp,
                 self.optimizer,
                 self.config,
                 val_loss,
@@ -252,7 +252,7 @@ class Train:
                 if self.config.distributed:
                     torch.cuda.synchronize()
 
-                losses = self.fp_bb_free_model.forward(imgs, targets)
+                losses = self.img2pose_model.forward(imgs, targets)
 
                 if self.config.distributed:
                     losses = reduce_dict(losses)
@@ -284,7 +284,7 @@ class Train:
             + f"{self.best_val_loss:.6f} at step {self.best_step}"
         )
 
-        self.fp_bb_free_model.train()
+        self.img2pose_model.train()
 
         return val_loss
 

@@ -16,7 +16,7 @@ class WrappedModel(Module):
         return self.module(images, targets)
 
 
-class FacePoseBBoxFreeModel:
+class img2poseModel:
     def __init__(
         self,
         depth,

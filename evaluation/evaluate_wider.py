@@ -9,7 +9,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 sys.path.append("./")
-from fpn_faster_rcnn_model import FacePoseBBoxFreeModel
+from img2pose import img2poseModel
 from model_loader import load_model
 
 
@@ -22,7 +22,7 @@ class WIDER_Eval:
 
         self.test_dataset = self.get_dataset(args)
         self.dataset_path = args.dataset_path
-        self.pose_bb_free_model = self.create_model(args)
+        self.img2pose_model = self.create_model(args)
 
         self.transform = transforms.Compose([transforms.ToTensor()])
         self.min_size = args.min_size
@@ -31,7 +31,7 @@ class WIDER_Eval:
         self.output_path = args.output_path
 
     def create_model(self, args):
-        pose_bb_free_model = FacePoseBBoxFreeModel(
+        img2pose_model = img2poseModel(
             args.depth,
             args.min_size[-1],
             args.max_size,
@@ -40,14 +40,14 @@ class WIDER_Eval:
             threed_68_points=self.threed_68_points,
         )
         load_model(
-            pose_bb_free_model.fpn_model,
+            img2pose_model.fpn_model,
             args.pretrained_path,
-            cpu_mode=str(pose_bb_free_model.device) == "cpu",
+            cpu_mode=str(img2pose_model.device) == "cpu",
             model_only=True,
         )
-        pose_bb_free_model.evaluate()
+        img2pose_model.evaluate()
 
-        return pose_bb_free_model
+        return img2pose_model
 
     def get_dataset(self, args):
         annotations = open(args.dataset_list)
@@ -141,13 +141,13 @@ class WIDER_Eval:
                     max_size = max(new_w, new_h)
 
                     if len(scales) > 1:
-                        self.pose_bb_free_model.fpn_model.module.set_max_min_size(
+                        self.img2pose_model.fpn_model.module.set_max_min_size(
                             max_size, min_size
                         )
 
                     time1 = time.time()
 
-                    res = self.pose_bb_free_model.predict([self.transform(run_img)])
+                    res = self.img2pose_model.predict([self.transform(run_img)])
 
                     time2 = time.time()
                     times.append(time2 - time1)
