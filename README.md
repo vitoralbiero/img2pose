@@ -157,7 +157,8 @@ bbox_x_factor = 1.1
 bbox_y_factor = 1.1
 # how much to expand in the forehead
 expand_forehead = 0.3
-pose_bb_free_model = FacePoseBBoxFreeModel(
+
+img2pose_model = img2poseModel(
     ...,    
     bbox_x_factor=bbox_x_factor,
     bbox_y_factor=bbox_y_factor,
