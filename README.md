@@ -27,13 +27,12 @@
   * [Testing on your own images](#testing-on-your-own-images)
 - [Output customization](#output-customization)
 - [Resources](#resources)
-- [Citation](#citation)
 - [License](#license)
 <!--te-->
 
 ## Paper details
 
-[Vítor Albiero](https://vitoralbiero.netlify.app), Xingyu Chen, Xi Yin, Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" [arXiv:2012.07791](https://arxiv.org/abs/2012.07791), Dec., 2020
+[Vítor Albiero](https://vitoralbiero.netlify.app), Xingyu Chen, [Xi Yin](https://xiyinmsu.github.io/), Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" [arXiv:2012.07791](https://arxiv.org/abs/2012.07791), Dec., 2020
 
 
 ### Abstract
@@ -41,7 +40,7 @@
 
 
 ### Citation
-If you use any part of our code, please cite our paper.
+If you use any part of our code or data, please cite our paper.
 ```
 @InProceedings{img2pose,
     author = {Vítor Albiero, Xingyu Chen, Xi Yin, Guan Pang, Tal Hassner},
