@@ -42,11 +42,11 @@
 ### Citation
 If you use any part of our code or data, please cite our paper.
 ```
-@InProceedings{img2pose,
-    author = {Vítor Albiero, Xingyu Chen, Xi Yin, Guan Pang, Tal Hassner},
-    title = {img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation},
-    booktitle = {arxiv},
-    year = {2020}
+@article{albiero2020img2pose,
+  title={img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation},
+  author={Albiero, Vítor and Chen, Xingyu and Yin, Xi and Pang, Guan and Hassner, Tal},
+  journal={arXiv preprint arXiv:2012.07791},
+  year={2020}
 }
 ```
 
