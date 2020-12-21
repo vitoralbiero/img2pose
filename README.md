@@ -144,9 +144,9 @@ Run the notebook [test_own_images](./evaluation/jupyter_notebooks/test_own_image
 ## Output customization
 
 For every face detected, the model outputs by default:
-- Pose (6 degrees of freedom)
-- Projected bounding boxes
-- Face scores
+- Pose: pitch, yaw, roll, horizontal translation, vertical translation, and scale
+- Projected bounding boxes: left, top, right, bottom
+- Face scores: 0 to 1
 
 Since the projected bounding box without expansion ends at the start of the forehead, we provide a way of expanding the forehead invidually, along with default x and y expansion. 
 
