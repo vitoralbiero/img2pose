@@ -1,8 +1,10 @@
 import cv2
 import numpy as np
 import torch
+from PIL import Image
 from scipy.spatial.transform import Rotation
 
+from .face_align import norm_crop
 from .image_operations import bbox_is_dict, expand_bbox_rectangle
 
 
@@ -299,34 +301,22 @@ def transform_pose_global_project_bbox(
     return projected_boxes.to(device), global_dofs.to(device)
 
 
-def nms(threshold, bboxes):
-    # Picked bounding boxes
-    picked_indices = []
+def align_faces(threed_5_points, img, poses, face_size=224):
+    if len(poses) == 0:
+        return None
+    elif np.ndim(poses) == 1:
+        poses = poses[np.newaxis, :]
 
-    score = bboxes[:, 4]
+    (w, h) = img.size
+    global_intrinsics = np.array([[w + h, 0, w // 2], [0, w + h, h // 2], [0, 0, 1]])
 
-    # Sort by confidence score of bounding boxes
-    order = np.argsort(score)
-    bboxes = bboxes.astype(int)
+    faces_aligned = []
 
-    while order.shape[0] > 0:
-        # The index of largest confidence score
-        index = order[-1]
+    for pose in poses:
+        proj_lms, _ = plot_3d_landmark(
+            threed_5_points, np.asarray(pose), global_intrinsics
+        )
+        face_aligned = norm_crop(np.asarray(img).copy(), proj_lms, face_size)
+        faces_aligned.append(Image.fromarray(face_aligned))
 
-        # Pick the bounding box with largest confidence score
-        picked_indices.append(index)
-
-        areas = (bboxes[:, 2] - bboxes[:, 0] + 1) * (bboxes[:, 3] - bboxes[:, 1] + 1)
-        xx1 = np.maximum(bboxes[:, 0], bboxes[order[-1]][0])
-        yy1 = np.maximum(bboxes[:, 1], bboxes[order[-1]][1])
-        xx2 = np.minimum(bboxes[:, 2], bboxes[order[-1]][2])
-        yy2 = np.minimum(bboxes[:, 3], bboxes[order[-1]][3])
-        w = np.maximum(0, xx2 - xx1 + 1)
-        h = np.maximum(0, yy2 - yy1 + 1)
-        inter = w * h
-        overlaps = inter / (areas[0] + areas[:] - inter)
-
-        left = np.where(overlaps[order[:-1]] <= threshold)
-        order = order[left]
-
-    return np.asarray(picked_indices)
+    return faces_aligned
