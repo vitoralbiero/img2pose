@@ -42,16 +42,18 @@
 ### Citation
 If you use any part of our code or data, please cite our paper.
 ```
-@InProceedings{img2pose,
-    author = {Vítor Albiero, Xingyu Chen, Xi Yin, Guan Pang, Tal Hassner},
-    title = {img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation},
-    booktitle = {arxiv},
-    year = {2020}
+@article{albiero2020img2pose,
+  title={img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation},
+  author={Albiero, Vítor and Chen, Xingyu and Yin, Xi and Pang, Guan and Hassner, Tal},
+  journal={arXiv preprint arXiv:2012.07791},
+  year={2020}
 }
 ```
 
 ## Installation
-Install dependecies.
+<img src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/> <img src="https://img.shields.io/badge/PyTorch%20-%23EE4C2C.svg?&style=for-the-badge&logo=PyTorch&logoColor=white" />
+
+Install dependecies with Python 3.
 ```
 pip install -r requirements.txt
 ```
@@ -142,9 +144,9 @@ Run the notebook [test_own_images](./evaluation/jupyter_notebooks/test_own_image
 ## Output customization
 
 For every face detected, the model outputs by default:
-- Pose (6 degrees of freedom)
-- Projected bounding boxes
-- Face scores
+- Pose: pitch, yaw, roll, horizontal translation, vertical translation, and scale
+- Projected bounding boxes: left, top, right, bottom
+- Face scores: 0 to 1
 
 Since the projected bounding box without expansion ends at the start of the forehead, we provide a way of expanding the forehead invidually, along with default x and y expansion. 
 
