@@ -26,6 +26,7 @@
   * [BIWI dataset evaluation](#biwi-dataset-evaluation)
   * [Testing on your own images](#testing-on-your-own-images)
 - [Output customization](#output-customization)
+- [Align faces](#align-faces)
 - [Resources](#resources)
 - [License](#license)
 <!--te-->
@@ -165,6 +166,17 @@ img2pose_model = img2poseModel(
     bbox_y_factor=bbox_y_factor,
     expand_forehead=expand_forehead,
 )
+```
+
+## Align faces
+To align the detected faces, call the [function](./utils/pose_operations.py#L304) bellow passing the reference points, the image with the faces to align, and the poses outputted by img2pose. The function will return a list with PIL images containing one aligned face per give pose.
+```
+from utils.pose_operations import align_faces
+
+# load reference points
+threed_points = np.load("pose_references/reference_3d_5_points_trans.npy")
+
+aligned_faces = align_faces(threed_points, img, poses)
 ```
 
 ## Resources
