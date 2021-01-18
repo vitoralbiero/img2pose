@@ -188,7 +188,7 @@ class WIDER_Eval:
                 bbox = bboxes[i]
 
                 f.write(
-                    f"{bbox[0]} {bbox[1]} {bbox[2]-bbox[0]} {bbox[3]-bbox[1]} {bbox[4]}"
+                    f"{bbox[0]} {bbox[1]} {bbox[2]-bbox[0]} {bbox[3]-bbox[1]} {bbox[4]}\n"
                 )
             f.close()
 
