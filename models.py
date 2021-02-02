@@ -539,7 +539,6 @@ class DOFRoIHeads(RoIHeads):
                 dof_regression,
                 dof_labels,
                 dof_regression_targets,
-                box_regression_targets,
                 dof_proposals,
                 image_shapes,
                 self.pose_mean,

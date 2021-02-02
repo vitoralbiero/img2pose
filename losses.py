@@ -9,10 +9,9 @@ from utils.pose_operations import plot_3d_landmark_torch, pose_full_image_to_bbo
 def fastrcnn_loss(
     class_logits,
     class_labels,
-    box_regression,
+    dof_regression,
     labels,
     dof_regression_targets,
-    box_regression_targets,
     proposals,
     image_shapes,
     pose_mean=None,
@@ -25,13 +24,14 @@ def fastrcnn_loss(
 
     Arguments:
         class_logits (Tensor)
-        box_regression (Tensor)
+        dof_regression (Tensor)
         labels (list[BoxList])
         regression_targets (Tensor)
 
     Returns:
         classification_loss (Tensor)
-        box_loss (Tensor)
+        dof_loss (Tensor)
+        points_loss (Tensor)
     """
     img_size = [
         (boxes_in_image.shape[0], image_shapes[i])
@@ -42,7 +42,6 @@ def fastrcnn_loss(
     labels = torch.cat(labels, dim=0)
     class_labels = torch.cat(class_labels, dim=0)
     dof_regression_targets = torch.cat(dof_regression_targets, dim=0)
-    box_regression_targets = torch.cat(box_regression_targets, dim=0)
     proposals = torch.cat(proposals, dim=0)
     classification_loss = F.cross_entropy(class_logits, class_labels)
 
@@ -51,17 +50,13 @@ def fastrcnn_loss(
     # advanced indexing
     sampled_pos_inds_subset = torch.nonzero(labels > 0).squeeze(1)
     labels_pos = labels[sampled_pos_inds_subset]
-    N = box_regression.shape[0]
-    box_regression = box_regression.reshape(N, -1, 6)
-    dof_regression = box_regression[sampled_pos_inds_subset, labels_pos]
+    N = dof_regression.shape[0]
+    dof_regression = dof_regression.reshape(N, -1, 6)
+    dof_regression = dof_regression[sampled_pos_inds_subset, labels_pos]
     prop_regression = proposals[sampled_pos_inds_subset]
 
     dof_regression_targets = dof_regression_targets[sampled_pos_inds_subset]
-
-    box_regression_targets = box_regression_targets[sampled_pos_inds_subset]
-    box_loss = F.l1_loss(prop_regression, box_regression_targets, reduction="sum")
-    box_loss = box_loss / prop_regression.numel()
-
+    
     all_target_calibration_points = None
     all_pred_calibration_points = None
 
