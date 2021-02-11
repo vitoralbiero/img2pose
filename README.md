@@ -22,6 +22,7 @@ This repository provides a novel method for six degrees of fredoom (6DoF) detect
 - [Training](#training)
   * [Prepare WIDER FACE dataset](#prepare-wider-face-dataset)
   * [Train](#train)
+  * [Training on your own dataset](#training-on-your-own-dataset)
 - [Testing](#testing)
   * [Visualizing trained model](#visualizing-trained-model)
   * [WIDER FACE dataset evaluation](#wider-face-dataset-evaluation)  
@@ -109,6 +110,17 @@ CUDA_VISIBLE_DEVICES=0 python3 train.py
 --max_size 1400
 ```
 For now, only single GPU training is tested. Distributed training is partially implemented, PRs welcome.
+
+### Training on your own dataset
+If your dataset has facial landmarks and bounding boxes already annotated, store them into JSON files following the same format as in the [WIDER FACE annotations](https://github.com/vitoralbiero/img2pose/wiki/Annotations).
+
+If not, run the script below to annotate your dataset. You will need a detector and import it inside the script.
+```
+python3 utils/annotate_dataset.py 
+--image_list list_of_images.txt 
+--output_path ./annotations/dataset_name
+```
+After the dataset is annotated, create a list pointing to the JSON files there were saved. Then, follow the steps in [Prepare WIDER FACE dataset](https://github.com/vitoralbiero/img2pose#prepare-wider-face-dataset) replacing the WIDER annotations with your own dataset annotations. Once the LMDB and pose files are created, follow the steps in [Train](https://github.com/vitoralbiero/img2pose#train) replacing the WIDER LMDB and pose files with your dataset own files.
 
 ## Testing
 To evaluate with the pretrained model, download the model from [Model Zoo](https://github.com/vitoralbiero/img2pose/wiki/Model-Zoo), and extract it to the main folder. It will create a folder called models, which contains the model weights and the pose mean and std dev that was used for training.
