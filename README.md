@@ -54,7 +54,7 @@ If you use any part of our code or data, please cite our paper.
   author={Albiero, Vítor and Chen, Xingyu and Yin, Xi and Pang, Guan and Hassner, Tal},
   booktitle={CVPR},
   year={2021},
-  url={arXiv preprint arXiv:2012.07791},
+  url={https://arxiv.org/abs/2012.07791},
 }
 ```
 
