@@ -1,6 +1,6 @@
 # img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation
 
-## Paper accepted to the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2021!
+## Paper accepted to the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2021
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/img2pose-face-alignment-and-detection-via/head-pose-estimation-on-aflw2000)](https://paperswithcode.com/sota/head-pose-estimation-on-aflw2000?p=img2pose-face-alignment-and-detection-via)
