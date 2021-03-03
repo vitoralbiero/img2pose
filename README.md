@@ -39,7 +39,7 @@ This repository provides a novel method for six degrees of fredoom (6DoF) detect
 
 ## Paper details
 
-[Vítor Albiero](https://vitoralbiero.netlify.app), Xingyu Chen, [Xi Yin](https://xiyinmsu.github.io/), Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" [arXiv:2012.07791](https://arxiv.org/abs/2012.07791), Dec., 2020
+[Vítor Albiero](https://vitoralbiero.netlify.app), Xingyu Chen, [Xi Yin](https://xiyinmsu.github.io/), Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" CVPR, 2021, [arXiv:2012.07791](https://arxiv.org/abs/2012.07791)
 
 
 ### Abstract
@@ -49,11 +49,12 @@ This repository provides a novel method for six degrees of fredoom (6DoF) detect
 ### Citation
 If you use any part of our code or data, please cite our paper.
 ```
-@article{albiero2020img2pose,
+@inproceedings{albiero2021img2pose,
   title={img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation},
   author={Albiero, Vítor and Chen, Xingyu and Yin, Xi and Pang, Guan and Hassner, Tal},
-  journal={arXiv preprint arXiv:2012.07791},
-  year={2020}
+  booktitle={CVPR},
+  year={2021},
+  url={arXiv preprint arXiv:2012.07791},
 }
 ```
 
