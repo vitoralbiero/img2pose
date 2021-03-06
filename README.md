@@ -1,5 +1,7 @@
 # img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation
 
+## Paper accepted to the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2021
+
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/img2pose-face-alignment-and-detection-via/head-pose-estimation-on-aflw2000)](https://paperswithcode.com/sota/head-pose-estimation-on-aflw2000?p=img2pose-face-alignment-and-detection-via)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/img2pose-face-alignment-and-detection-via/head-pose-estimation-on-biwi)](https://paperswithcode.com/sota/head-pose-estimation-on-biwi?p=img2pose-face-alignment-and-detection-via)
@@ -8,6 +10,9 @@
   <img src="./teaser.jpeg" style="width:100%">
   <figcaption>Figure 1: We estimate the 6DoF rigid transformation of a 3D face (rendered in silver), aligning it with even the tiniest faces, without face detection or facial landmark localization. Our estimated 3D face locations are rendered by descending distances from the camera, for coherent visualization.</figcaption>
 </figure>
+
+## TL;DR
+This repository provides a novel method for six degrees of fredoom (6DoF) detection on multiple faces without the need of prior face detection. After prediction, one can visualize the detections (as show in the figure above), customize projected bounding boxes, or crop and align each face for further processing. See details below.
 
 ## Table of contents
 
@@ -19,6 +24,7 @@
 - [Training](#training)
   * [Prepare WIDER FACE dataset](#prepare-wider-face-dataset)
   * [Train](#train)
+  * [Training on your own dataset](#training-on-your-own-dataset)
 - [Testing](#testing)
   * [Visualizing trained model](#visualizing-trained-model)
   * [WIDER FACE dataset evaluation](#wider-face-dataset-evaluation)  
@@ -26,13 +32,14 @@
   * [BIWI dataset evaluation](#biwi-dataset-evaluation)
   * [Testing on your own images](#testing-on-your-own-images)
 - [Output customization](#output-customization)
+- [Align faces](#align-faces)
 - [Resources](#resources)
 - [License](#license)
 <!--te-->
 
 ## Paper details
 
-[Vítor Albiero](https://vitoralbiero.netlify.app), Xingyu Chen, [Xi Yin](https://xiyinmsu.github.io/), Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" [arXiv:2012.07791](https://arxiv.org/abs/2012.07791), Dec., 2020
+[Vítor Albiero](https://vitoralbiero.netlify.app), Xingyu Chen, [Xi Yin](https://xiyinmsu.github.io/), Guan Pang, [Tal Hassner](https://talhassner.github.io/home/), "*img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation,*" CVPR, 2021, [arXiv:2012.07791](https://arxiv.org/abs/2012.07791)
 
 
 ### Abstract
@@ -42,11 +49,12 @@
 ### Citation
 If you use any part of our code or data, please cite our paper.
 ```
-@article{albiero2020img2pose,
+@inproceedings{albiero2021img2pose,
   title={img2pose: Face Alignment and Detection via 6DoF, Face Pose Estimation},
   author={Albiero, Vítor and Chen, Xingyu and Yin, Xi and Pang, Guan and Hassner, Tal},
-  journal={arXiv preprint arXiv:2012.07791},
-  year={2020}
+  booktitle={CVPR},
+  year={2021},
+  url={https://arxiv.org/abs/2012.07791},
 }
 ```
 
@@ -105,6 +113,17 @@ CUDA_VISIBLE_DEVICES=0 python3 train.py
 --max_size 1400
 ```
 For now, only single GPU training is tested. Distributed training is partially implemented, PRs welcome.
+
+### Training on your own dataset
+If your dataset has facial landmarks and bounding boxes already annotated, store them into JSON files following the same format as in the [WIDER FACE annotations](https://github.com/vitoralbiero/img2pose/wiki/Annotations).
+
+If not, run the script below to annotate your dataset. You will need a detector and import it inside the script.
+```
+python3 utils/annotate_dataset.py 
+--image_list list_of_images.txt 
+--output_path ./annotations/dataset_name
+```
+After the dataset is annotated, create a list pointing to the JSON files there were saved. Then, follow the steps in [Prepare WIDER FACE dataset](https://github.com/vitoralbiero/img2pose#prepare-wider-face-dataset) replacing the WIDER annotations with your own dataset annotations. Once the LMDB and pose files are created, follow the steps in [Train](https://github.com/vitoralbiero/img2pose#train) replacing the WIDER LMDB and pose files with your dataset own files.
 
 ## Testing
 To evaluate with the pretrained model, download the model from [Model Zoo](https://github.com/vitoralbiero/img2pose/wiki/Model-Zoo), and extract it to the main folder. It will create a folder called models, which contains the model weights and the pose mean and std dev that was used for training.
@@ -165,6 +184,17 @@ img2pose_model = img2poseModel(
     bbox_y_factor=bbox_y_factor,
     expand_forehead=expand_forehead,
 )
+```
+
+## Align faces
+To align the detected faces, call the [function](./utils/pose_operations.py#L304) bellow passing the reference points, the image with the faces to align, and the poses outputted by img2pose. The function will return a list with PIL images containing one aligned face per give pose.
+```
+from utils.pose_operations import align_faces
+
+# load reference points
+threed_points = np.load("pose_references/reference_3d_5_points_trans.npy")
+
+aligned_faces = align_faces(threed_points, img, poses)
 ```
 
 ## Resources
