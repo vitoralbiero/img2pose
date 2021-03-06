@@ -163,7 +163,7 @@ Run the notebook [test_own_images](./evaluation/jupyter_notebooks/test_own_image
 ## Output customization
 
 For every face detected, the model outputs by default:
-- Pose: pitch, yaw, roll, horizontal translation, vertical translation, and scale
+- Pose: r<sub>x</sub>, r<sub>y</sub>, r<sub>z</sub>, t<sub>x</sub>, t<sub>y</sub>, t<sub>z</sub>
 - Projected bounding boxes: left, top, right, bottom
 - Face scores: 0 to 1
 
