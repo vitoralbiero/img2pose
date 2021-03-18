@@ -99,7 +99,6 @@ class Train:
         self.save_file(self.optimizer, "optimizer.txt")
 
         self.tensorboard_loss_every = max(len(self.train_loader) // 100, 1)
-        # self.evaluate_every = max(len(self.train_loader) // 1, 1)
 
         # reduce learning rate when the validation loss stops to decrease
         if self.config.lr_plateau:
