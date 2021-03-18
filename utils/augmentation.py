@@ -119,89 +119,93 @@ def random_flip(img, bboxes, all_landmarks):
             if -1 in landmarks:
                 continue
 
-            if len(landmarks) == 5:
-                order = [1, 0, 2, 4, 3]
-            else:
-                order = [
-                    16,
-                    15,
-                    14,
-                    13,
-                    12,
-                    11,
-                    10,
-                    9,
-                    8,
-                    7,
-                    6,
-                    5,
-                    4,
-                    3,
-                    2,
-                    1,
-                    0,
-                    26,
-                    25,
-                    24,
-                    23,
-                    22,
-                    21,
-                    20,
-                    19,
-                    18,
-                    17,
-                    27,
-                    28,
-                    29,
-                    30,
-                    35,
-                    34,
-                    33,
-                    32,
-                    31,
-                    45,
-                    44,
-                    43,
-                    42,
-                    47,
-                    46,
-                    39,
-                    38,
-                    37,
-                    36,
-                    41,
-                    40,
-                    54,
-                    53,
-                    52,
-                    51,
-                    50,
-                    49,
-                    48,
-                    59,
-                    58,
-                    57,
-                    56,
-                    55,
-                    64,
-                    63,
-                    62,
-                    61,
-                    60,
-                    67,
-                    66,
-                    65,
-                ]
-
-            # flip landmarks
-            landmarks[:, 0] = w - landmarks[:, 0]
-            flandmarks = landmarks.copy()
-            for idx, a in enumerate(order):
-                flandmarks[idx, :] = landmarks[a, :]
-
-            all_landmarks[i] = flandmarks.tolist()
+            all_landmarks[i] = flip_landmarks(landmarks, w).tolist()
 
     return img, bboxes, all_landmarks
+
+
+def flip_landmarks(landmarks, w):
+    if len(landmarks) == 5:
+        order = [1, 0, 2, 4, 3]
+    else:
+        order = [
+            16,
+            15,
+            14,
+            13,
+            12,
+            11,
+            10,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+            0,
+            26,
+            25,
+            24,
+            23,
+            22,
+            21,
+            20,
+            19,
+            18,
+            17,
+            27,
+            28,
+            29,
+            30,
+            35,
+            34,
+            33,
+            32,
+            31,
+            45,
+            44,
+            43,
+            42,
+            47,
+            46,
+            39,
+            38,
+            37,
+            36,
+            41,
+            40,
+            54,
+            53,
+            52,
+            51,
+            50,
+            49,
+            48,
+            59,
+            58,
+            57,
+            56,
+            55,
+            64,
+            63,
+            62,
+            61,
+            60,
+            67,
+            66,
+            65,
+        ]
+
+    # flip landmarks
+    landmarks[:, 0] = w - landmarks[:, 0]
+    flandmarks = landmarks.copy()
+    for idx, a in enumerate(order):
+        flandmarks[idx, :] = landmarks[a, :]
+
+    return flandmarks
 
 
 def rotate(img, landmarks, bbox):
