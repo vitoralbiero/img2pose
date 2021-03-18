@@ -81,7 +81,9 @@ class img2pose:
 
                 elif self.order_method == "position":
                     distance_center = np.sqrt(
-                        all_poses[:, 3] ** 2 + all_poses[:, 4] ** 2
+                        all_poses[:, 3] ** 2
+                        + all_poses[:, 4] ** 2
+                        + all_poses[:, 5] ** 2
                     )
 
                     order = np.argsort(distance_center)
