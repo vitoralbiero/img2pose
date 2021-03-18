@@ -140,6 +140,8 @@ If you haven't done already, download the [WIDER FACE](http://shuoyang1213.me/WI
 python3 evaluation/evaluate_wider.py 
 --dataset_path datasets/WIDER_Face/WIDER_val/images/
 --dataset_list datasets/WIDER_Face/wider_face_split/wider_face_val_bbx_gt.txt
+--pose_mean models/WIDER_train_pose_mean_v1.npy 
+--pose_stddev models/WIDER_train_pose_stddev_v1.npy
 --pretrained_path models/img2pose_v1.pth
 --output_path results/WIDER_FACE/Val/
 ```
