@@ -88,6 +88,13 @@ class img2pose:
 
                 top_poses = all_poses[order][: self.max_faces]
 
+                sub_folder = os.path.basename(
+                    os.path.normpath(os.path.split(img_path)[0])
+                )
+                output_path = os.path.join(args.output_path, sub_folder)
+                if not os.path.exists(output_path):
+                    os.makedirs(output_path)
+
                 for i in range(len(top_poses)):
                     save_name = image_name
                     if len(top_poses) > 1:
@@ -98,7 +105,7 @@ class img2pose:
                         0
                     ]
                     aligned_face = aligned_face.resize((self.face_size, self.face_size))
-                    aligned_face.save(os.path.join(args.output_path, save_name))
+                    aligned_face.save(os.path.join(output_path, save_name))
             else:
                 print(f"No face detected above the threshold {self.det_threshold}!")
 
