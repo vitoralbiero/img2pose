@@ -189,14 +189,14 @@ img2pose_model = img2poseModel(
 ```
 
 ## Align faces
-To align the detected faces, call the [function](./utils/pose_operations.py#L304) bellow passing the reference points, the image with the faces to align, and the poses outputted by img2pose. The function will return a list with PIL images containing one aligned face per give pose.
+To detect and align faces, simply run the command below, passing the path to the images you want to detect and align and the path to save them.
 ```
-from utils.pose_operations import align_faces
-
-# load reference points
-threed_points = np.load("pose_references/reference_3d_5_points_trans.npy")
-
-aligned_faces = align_faces(threed_points, img, poses)
+python3 run_face_alignment.py
+--pose_mean models/WIDER_train_pose_mean_v1.npy 
+--pose_stddev models/WIDER_train_pose_stddev_v1.npy
+--pretrained_path models/img2pose_v1.pth
+--images_path image_path_or_list
+--output_path path_to_save_aligned_faces
 ```
 
 ## Resources
