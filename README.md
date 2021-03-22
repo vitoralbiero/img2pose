@@ -136,6 +136,8 @@ To visualize a trained model on the WIDER FACE validation set run the notebook [
 ### WIDER FACE dataset evaluation
 If you haven't done already, download the [WIDER FACE](http://shuoyang1213.me/WIDERFACE/) dataset and extract to datasets/WIDER_Face.
 
+Download the [pre-trained model](https://drive.google.com/file/d/1OvnZ7OUQFg2bAgFADhT7UnCkSaXst10O/view?usp=sharing).
+
 ```
 python3 evaluation/evaluate_wider.py 
 --dataset_path datasets/WIDER_Face/WIDER_val/images/
@@ -151,10 +153,14 @@ To check mAP and plot curves, download the [eval tools](http://shuoyang1213.me/W
 ### AFLW2000-3D dataset evaluation
 Download the [AFLW2000-3D](http://www.cbsr.ia.ac.cn/users/xiangyuzhu/projects/3DDFA/Database/AFLW2000-3D.zip) dataset and unzip to datasets/AFLW2000.
 
+Download the [fine-tuned model](https://drive.google.com/file/d/1wSqPr9h1x_TOaxuN-Nu3OlTmhqnuf6rZ/view?usp=sharing).
+
 Run the notebook [aflw_2000_3d_evaluation](./evaluation/jupyter_notebooks/aflw_2000_3d_evaluation.ipynb).
 
 ### BIWI dataset evaluation
 Download the [BIWI](http://data.vision.ee.ethz.ch/cvl/gfanelli/kinect_head_pose_db.tgz) dataset and unzip to datasets/BIWI.
+
+Download the [fine-tuned model](https://drive.google.com/file/d/1wSqPr9h1x_TOaxuN-Nu3OlTmhqnuf6rZ/view?usp=sharing).
 
 Run the notebook [biwi_evaluation](./evaluation/jupyter_notebooks/biwi_evaluation.ipynb).
 
