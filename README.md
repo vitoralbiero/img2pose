@@ -178,7 +178,7 @@ For every face detected, the model outputs by default:
 Since the projected bounding box without expansion ends at the start of the forehead, we provide a way of expanding the forehead invidually, along with default x and y expansion. 
 
 To customize the size of the projected bounding boxes, when creating the model change any of the bounding box expansion variables as shown below (a complete example can be seen at [visualize_trained_model_predictions](evaluation/jupyter_notebooks/visualize_trained_model_predictions.ipynb)).
-```
+```python
 # how much to expand in width
 bbox_x_factor = 1.1
 # how much to expand in height
