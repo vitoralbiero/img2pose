@@ -101,7 +101,6 @@ class Train:
             self.save_file(self.optimizer, "optimizer.txt")
 
         self.tensorboard_loss_every = max(len(self.train_loader) // 100, 1)
-        # self.evaluate_every = max(len(self.train_loader) // 1, 1)
 
         # reduce learning rate when the validation loss stops to decrease
         if self.config.lr_plateau:
@@ -306,7 +305,7 @@ def parse_args():
     )
     # network and training parameters
     parser.add_argument(
-        "--min_size", help="Min size", default=(640, 672, 704, 736, 768, 800), type=int
+        "--min_size", help="Min size", default=(640, 672, 704, 736, 768, 800), type=str
     )
     parser.add_argument("--max_size", help="Max size", default=1400, type=int)
     parser.add_argument("--epochs", help="Number of epochs.", default=100, type=int)
@@ -386,6 +385,8 @@ def parse_args():
     )
 
     args = parser.parse_args()
+
+    args.min_size = [int(item) for item in args.min_size.split(",")]
 
     return args
 
