@@ -2,8 +2,9 @@ import time
 
 
 class TrainLogger(object):
-    def __init__(self, batch_size, frequency=50):
-        self.batch_size = batch_size
+    def __init__(self, batch_size, frequency=50, num_gpus=1):
+        self.num_gpus = num_gpus
+        self.batch_size = batch_size * num_gpus
         self.frequency = frequency
         self.init = False
         self.tic = 0
@@ -21,6 +22,7 @@ class TrainLogger(object):
                 speed = self.frequency * self.batch_size / (time.time() - self.tic)
                 self.running_loss = self.running_loss / self.frequency
 
+                batch, total = batch * self.num_gpus, total * self.num_gpus
                 log = (
                     f"Epoch: [{epoch + 1}-{total_epochs}] Batch: [{batch}-{total}] "
                     + f"Speed: {speed:.2f} samples/sec Loss: {self.running_loss:.5f}"

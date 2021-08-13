@@ -15,15 +15,16 @@ from early_stop import EarlyStop
 from img2pose import img2poseModel
 from model_loader import load_model, save_model
 from train_logger import TrainLogger
-from utils.dist import init_distributed_mode, reduce_dict
+from utils.dist import init_distributed_mode, is_main_process, reduce_dict
 
 
 class Train:
     def __init__(self, config):
         self.config = config
 
-        # start tensorboard summary writer
-        self.writer = SummaryWriter(config.log_path)
+        if is_main_process():
+            # start tensorboard summary writer
+            self.writer = SummaryWriter(config.log_path)
 
         # load training dataset generator
         if self.config.random_flip or self.config.random_crop:
@@ -89,14 +90,15 @@ class Train:
                 cpu_mode=str(self.config.device) == "cpu",
             )
 
-        # saves configuration to file for easier retrival later
-        print(self.config)
-        self.save_file(self.config, "config.txt")
+        if is_main_process():
+            # saves configuration to file for easier retrival later
+            print(self.config)
+            self.save_file(self.config, "config.txt")
 
-        # saves optimizer config to file for easier retrival later
-        print(self.optimizer)
-
-        self.save_file(self.optimizer, "optimizer.txt")
+        if is_main_process():
+            # saves optimizer config to file for easier retrival later
+            print(self.optimizer)
+            self.save_file(self.optimizer, "optimizer.txt")
 
         self.tensorboard_loss_every = max(len(self.train_loader) // 100, 1)
         # self.evaluate_every = max(len(self.train_loader) // 1, 1)
@@ -133,7 +135,9 @@ class Train:
 
         for epoch in range(self.config.epochs):
             train_logger = TrainLogger(
-                self.config.batch_size, self.config.frequency_log
+                self.config.batch_size,
+                self.config.frequency_log,
+                self.config.num_gpus
             )
             idx = 0
             for idx, data in enumerate(self.train_loader):
@@ -175,11 +179,12 @@ class Train:
                 # saves loss into tensorboard
                 if step % self.tensorboard_loss_every == 0 and step != 0:
                     for loss_name in running_losses.keys():
-                        self.writer.add_scalar(
-                            f"train_{loss_name}",
-                            running_losses[loss_name] / self.tensorboard_loss_every,
-                            step,
-                        )
+                        if is_main_process():
+                            self.writer.add_scalar(
+                                f"train_{loss_name}",
+                                running_losses[loss_name] / self.tensorboard_loss_every,
+                                step,
+                            )
 
                         running_losses[loss_name] = 0
 
@@ -268,11 +273,12 @@ class Train:
                 val_losses["loss"] += loss.item()
 
         for loss_name in val_losses.keys():
-            self.writer.add_scalar(
-                f"val_{loss_name}",
-                round(val_losses[loss_name] / len(self.val_loader), 6),
-                step,
-            )
+            if is_main_process():
+                self.writer.add_scalar(
+                    f"val_{loss_name}",
+                    round(val_losses[loss_name] / len(self.val_loader), 6),
+                    step,
+                )
 
         val_loss = round(val_losses["loss"] / len(self.val_loader), 6)
         self.checkpoint(val_loss, step)

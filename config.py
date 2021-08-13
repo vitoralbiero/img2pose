@@ -68,6 +68,8 @@ class Config(EasyDict):
         else:
             self.gpu = args.gpu
 
+        self.num_gpus = args.world_size
+
     def create_path(self, file_path):
         if not os.path.exists(file_path):
             os.makedirs(file_path)

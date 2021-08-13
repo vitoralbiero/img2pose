@@ -12,7 +12,8 @@ from torchvision import transforms
 
 import utils.augmentation as augmentation
 from utils.image_operations import expand_bbox_rectangle
-from utils.pose_operations import get_pose, plot_3d_landmark, pose_bbox_to_full_image
+from utils.pose_operations import (get_pose, plot_3d_landmark,
+                                   pose_bbox_to_full_image)
 
 
 class LMDB(Dataset):
@@ -179,29 +180,36 @@ class LMDBDataLoaderAugmenter(DataLoader):
             augmentation_methods,
         )
 
-        if not train and config.distributed:
-            batch_size = 1
-        else:
-            batch_size = config.batch_size
-
         if config.distributed:
-            self._sampler = DistributedSampler(self._dataset)
+            self._sampler = DistributedSampler(self._dataset, shuffle=False)
 
             if train:
-                self._sampler = BatchSampler(self._sampler, batch_size, drop_last=True)
+                self._sampler = BatchSampler(
+                    self._sampler, config.batch_size, drop_last=True
+                )
 
-            super(LMDBDataLoaderAugmenter, self).__init__(
-                self._dataset,
-                batch_sampler=self._sampler,
-                pin_memory=config.pin_memory,
-                num_workers=config.workers,
-                collate_fn=collate_fn,
-            )
+                super(LMDBDataLoaderAugmenter, self).__init__(
+                    self._dataset,
+                    batch_sampler=self._sampler,
+                    pin_memory=config.pin_memory,
+                    num_workers=config.workers,
+                    collate_fn=collate_fn,
+                )
+            else:
+                super(LMDBDataLoaderAugmenter, self).__init__(
+                    self._dataset,
+                    config.batch_size,
+                    drop_last=False,
+                    sampler=self._sampler,
+                    pin_memory=config.pin_memory,
+                    num_workers=config.workers,
+                    collate_fn=collate_fn,
+                )
 
         else:
             super(LMDBDataLoaderAugmenter, self).__init__(
                 self._dataset,
-                batch_size=batch_size,
+                batch_size=config.batch_size,
                 shuffle=train,
                 pin_memory=config.pin_memory,
                 num_workers=config.workers,

@@ -134,3 +134,4 @@ dmypy.json
 **/results/*
 **/models/*
 *.json
+*.sge

@@ -147,29 +147,36 @@ class LMDBDataLoader(DataLoader):
             config, lmdb_path, transform, pose_label_transform, augmentation_methods
         )
 
-        if not train and config.distributed:
-            batch_size = 1
-        else:
-            batch_size = config.batch_size
-
         if config.distributed:
-            self._sampler = DistributedSampler(self._dataset)
+            self._sampler = DistributedSampler(self._dataset, shuffle=False)
 
             if train:
-                self._sampler = BatchSampler(self._sampler, batch_size, drop_last=True)
+                self._sampler = BatchSampler(
+                    self._sampler, config.batch_size, drop_last=True
+                )
 
-            super(LMDBDataLoader, self).__init__(
-                self._dataset,
-                batch_sampler=self._sampler,
-                pin_memory=config.pin_memory,
-                num_workers=config.workers,
-                collate_fn=collate_fn,
-            )
+                super(LMDBDataLoader, self).__init__(
+                    self._dataset,
+                    batch_sampler=self._sampler,
+                    pin_memory=config.pin_memory,
+                    num_workers=config.workers,
+                    collate_fn=collate_fn,
+                )
+            else:
+                super(LMDBDataLoader, self).__init__(
+                    self._dataset,
+                    config.batch_size,
+                    drop_last=False,
+                    sampler=self._sampler,
+                    pin_memory=config.pin_memory,
+                    num_workers=config.workers,
+                    collate_fn=collate_fn,
+                )
 
         else:
             super(LMDBDataLoader, self).__init__(
                 self._dataset,
-                batch_size=batch_size,
+                batch_size=config.batch_size,
                 shuffle=train,
                 pin_memory=config.pin_memory,
                 num_workers=config.workers,
