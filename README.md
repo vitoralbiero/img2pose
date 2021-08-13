@@ -83,17 +83,17 @@ Download [WIDER FACE](http://shuoyang1213.me/WIDERFACE/) dataset and extract to 
 Then, to create the train and validation files (LMDB), run the following scripts.
 
 ```
-python3 convert_json_list_to_lmdb.py
---json_list ./annotations/WIDER_train_annotations.txt
---dataset_path ./datasets/WIDER_Face/WIDER_train/images/
---dest ./datasets/lmdb/
+python3 convert_json_list_to_lmdb.py \
+--json_list ./annotations/WIDER_train_annotations.txt \
+--dataset_path ./datasets/WIDER_Face/WIDER_train/images/ \
+--dest ./datasets/lmdb/ \
 -—train
 ```
 This first script will generate a LMDB dataset, which contains the training images along with annotations. It will also output a pose mean and std deviation files, which will be used for training and testing.
 ```
-python3 convert_json_list_to_lmdb.py 
---json_list ./annotations/WIDER_val_annotations.txt 
---dataset_path ./datasets/WIDER_Face/WIDER_val/images/ 
+python3 convert_json_list_to_lmdb.py  \
+--json_list ./annotations/WIDER_val_annotations.txt  \
+--dataset_path ./datasets/WIDER_Face/WIDER_val/images/  \
 --dest ./datasets/lmdb
 ```
 This second script will create a LMDB containing the validation images along with annotations.
@@ -101,21 +101,37 @@ This second script will create a LMDB containing the validation images along wit
 ### Train
 Once the LMDB train/val files are created, to start training simple run the script below.
 ```
-CUDA_VISIBLE_DEVICES=0 python3 train.py
---pose_mean ./datasets/lmdb/WIDER_train_annotations_pose_mean.npy
---pose_stddev ./datasets/lmdb/WIDER_train_annotations_pose_stddev.npy
---workspace ./workspace/
---train_source ./datasets/lmdb/WIDER_train_annotations.lmdb
---val_source ./datasets/lmdb/WIDER_val_annotations.lmdb
---prefix trial_1
---batch_size 2
---lr_plateau
---early_stop
---random_flip
---random_crop
+CUDA_VISIBLE_DEVICES=0 python3 train.py \
+--pose_mean ./datasets/lmdb/WIDER_train_annotations_pose_mean.npy \
+--pose_stddev ./datasets/lmdb/WIDER_train_annotations_pose_stddev.npy \
+--workspace ./workspace/ \
+--train_source ./datasets/lmdb/WIDER_train_annotations.lmdb \
+--val_source ./datasets/lmdb/WIDER_val_annotations.lmdb \
+--prefix trial_1 \
+--batch_size 2 \
+--lr_plateau \
+--early_stop \
+--random_flip \
+--random_crop \
 --max_size 1400
 ```
-For now, only single GPU training is tested. Distributed training is partially implemented, PRs welcome.
+To train with multiple GPUs (in the example below 4 GPUs), use the script below.
+```
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env train.py \
+--pose_mean ./datasets/lmdb/WIDER_train_annotations_pose_mean.npy \
+--pose_stddev ./datasets/lmdb/WIDER_train_annotations_pose_stddev.npy \
+--workspace ./workspace/ \
+--train_source ./datasets/lmdb/WIDER_train_annotations.lmdb \
+--val_source ./datasets/lmdb/WIDER_val_annotations.lmdb \
+--prefix trial_1 \
+--batch_size 2 \
+--lr_plateau \
+--early_stop \
+--random_flip \
+--random_crop \
+--max_size 1400 \
+--distributed
+```
 
 ### Training on your own dataset
 If your dataset has facial landmarks and bounding boxes already annotated, store them into JSON files following the same format as in the [WIDER FACE annotations](https://github.com/vitoralbiero/img2pose/wiki/Annotations).
@@ -142,12 +158,12 @@ If you haven't done already, download the [WIDER FACE](http://shuoyang1213.me/WI
 Download the [pre-trained model](https://drive.google.com/file/d/1OvnZ7OUQFg2bAgFADhT7UnCkSaXst10O/view?usp=sharing).
 
 ```
-python3 evaluation/evaluate_wider.py 
---dataset_path datasets/WIDER_Face/WIDER_val/images/
---dataset_list datasets/WIDER_Face/wider_face_split/wider_face_val_bbx_gt.txt
---pose_mean models/WIDER_train_pose_mean_v1.npy 
---pose_stddev models/WIDER_train_pose_stddev_v1.npy
---pretrained_path models/img2pose_v1.pth
+python3 evaluation/evaluate_wider.py \
+--dataset_path datasets/WIDER_Face/WIDER_val/images/ \
+--dataset_list datasets/WIDER_Face/wider_face_split/wider_face_val_bbx_gt.txt \
+--pose_mean models/WIDER_train_pose_mean_v1.npy \
+--pose_stddev models/WIDER_train_pose_stddev_v1.npy \
+--pretrained_path models/img2pose_v1.pth \
 --output_path results/WIDER_FACE/Val/
 ```
 
@@ -200,11 +216,11 @@ img2pose_model = img2poseModel(
 ## Align faces
 To detect and align faces, simply run the command below, passing the path to the images you want to detect and align and the path to save them.
 ```
-python3 run_face_alignment.py
---pose_mean models/WIDER_train_pose_mean_v1.npy 
---pose_stddev models/WIDER_train_pose_stddev_v1.npy
---pretrained_path models/img2pose_v1.pth
---images_path image_path_or_list
+python3 run_face_alignment.py \
+--pose_mean models/WIDER_train_pose_mean_v1.npy \
+--pose_stddev models/WIDER_train_pose_stddev_v1.npy \
+--pretrained_path models/img2pose_v1.pth \
+--images_path image_path_or_list \
 --output_path path_to_save_aligned_faces
 ```
 
