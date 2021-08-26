@@ -383,6 +383,8 @@ def parse_args():
     )
 
     args = parser.parse_args()
+    
+    args.min_size = [int(item) for item in args.min_size.split(",")]
 
     return args
 
