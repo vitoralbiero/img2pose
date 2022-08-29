@@ -87,7 +87,7 @@ python3 convert_json_list_to_lmdb.py \
 --json_list ./annotations/WIDER_train_annotations.txt \
 --dataset_path ./datasets/WIDER_Face/WIDER_train/images/ \
 --dest ./datasets/lmdb/ \
--—train
+--train
 ```
 This first script will generate a LMDB dataset, which contains the training images along with annotations. It will also output a pose mean and std deviation files, which will be used for training and testing.
 ```
